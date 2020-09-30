@@ -1,0 +1,10 @@
+
+language: python
+python:
+- "3.8"
+install:
+- pip install requests
+- pip install html-testRunner
+# command to run tests
+script:
+- python -m unittest test_hwGitApi.py
