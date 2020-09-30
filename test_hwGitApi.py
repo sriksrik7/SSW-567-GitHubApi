@@ -18,7 +18,7 @@ class Test_getUserGitHubData(unittest.TestCase):
         result=getUserGitHubData('sriksrik7')
         self.assertEqual(result, ['Repository: HelloWorld has 2 commits',
                                   'Repository: SSW-567 has 6 commits',
-                                  'Repository: SSW-567-GitHubApi has 2 commits'])
+                                  'Repository: SSW-567-GitHubApi has 4 commits'])
 
 if __name__ == '__main__':
     print('Run unit tests')
