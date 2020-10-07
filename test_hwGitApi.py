@@ -2,23 +2,33 @@ import unittest
 import requests
 import HtmlTestRunner
 from hwGitApi import getUserGitHubData
+from unittest.mock import patch
 
 class Test_getUserGitHubData(unittest.TestCase):
 
     # Test Blank data
     def test_getUserGitData(self):
-        self.assertIsNone(getUserGitHubData(''))
+        with patch('requests.get') as mockRequest:
+                mockRequest.return_value.status_code = 400
+                result = getUserGitHubData('')
+        self.assertIsNone(result)
 
     # Test Invalid data
     def test_getGitInvalidData(self):
-        self.assertIsNotNone(getUserGitHubData('234'))
+        with patch('requests.get') as mockRequest:
+                mockRequest.return_value.status_code = 403
+                result = getUserGitHubData('234')
+        self.assertEqual(result,'Forbidden')
 
     # Test my git hub data
     def test_getMyUserGitData(self):
-        result=getUserGitHubData('sriksrik7')
-        self.assertEqual(result, ['Repository: HelloWorld has 2 commits',
-                                  'Repository: SSW-567 has 6 commits',
-                                  'Repository: SSW-567-GitHubApi has 4 commits'])
+        with patch('requests.get') as mockRequest:
+                mockRequest.return_value.status_code = 200
+                mockRequest.return_value.json.return_value  = [{"name":"HelloWorld"},{"name":"SSW-567"},{"name":"SSW-567-GitHubApi"}]
+                result=getUserGitHubData('sriksrik7')
+        self.assertEqual(result, ['Repository: HelloWorld has 3 commits',
+                                  'Repository: SSW-567 has 3 commits',
+                                  'Repository: SSW-567-GitHubApi has 3 commits'])
 
 if __name__ == '__main__':
     print('Run unit tests')
